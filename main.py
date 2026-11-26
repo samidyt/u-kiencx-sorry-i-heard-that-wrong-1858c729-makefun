@@ -8,15 +8,26 @@ to entry.txt. Standard library only.
 import os
 import sys
 
+MAX_CHARS = 140
+
 LINE = "Sorry — I heard 'play something chill' as 'buy a chinchilla'. He's in the hallway, his name is Kevin, and he judges you."
 
 
+def validate(line):
+    """Mirror the sealed gate: 1-140 chars, not only whitespace, one line."""
+    if not 1 <= len(line) <= MAX_CHARS:
+        return f"entry is {len(line)} chars, must be 1-{MAX_CHARS}"
+    if not line.strip():
+        return "entry is only whitespace"
+    if "\n" in line or "\r" in line:
+        return "entry must be a single line"
+    return None
+
+
 def main():
-    if not 1 <= len(LINE) <= 140:
-        print(f"entry is {len(LINE)} chars, must be 1-140", file=sys.stderr)
-        return 1
-    if not LINE.strip():
-        print("entry is only whitespace", file=sys.stderr)
+    problem = validate(LINE)
+    if problem is not None:
+        print(problem, file=sys.stderr)
         return 1
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
