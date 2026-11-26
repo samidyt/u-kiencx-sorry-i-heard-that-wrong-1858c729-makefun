@@ -31,9 +31,12 @@ def main():
         return 1
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
+    # Write the line exactly, with no trailing newline: the file holds
+    # one line of 120 characters and nothing else.
+    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
     print(LINE)
+    print(f"({len(LINE)} chars)", file=sys.stderr)
     return 0
 
 
